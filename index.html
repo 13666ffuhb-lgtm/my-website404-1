@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 — Page Not Found</title>
+  <!-- Подключаем шрифт Chiller -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chiller&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      /* Устанавливаем фон по вашей ссылке из Pinterest с лёгким затемнением */
+      background: 
+        linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+        url('https://i.pinimg.com/1200x/ee/03/dd/ee03dde01647d34247482444ad3f7c4c.jpg') center/cover no-repeat;
+    }
+
+    .error-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      user-select: none;
+    }
+
+    /* Цифры 4 шрифтом Chiller с кроваво-красным цветом и тенью */
+    .digit {
+      font-family: 'Chiller', cursive, sans-serif;
+      font-size: clamp(140px, 25vw, 320px);
+      color: #b51a1a;
+      text-shadow: 0 5px 25px rgba(0, 0, 0, 0.9), 0 0 15px rgba(181, 26, 26, 0.6);
+      line-height: 1;
+      transform: translateY(10px);
+      font-weight: bold;
+    }
+
+    /* Глазное яблоко (вместо нуля) */
+    .eye {
+      position: relative;
+      width: clamp(90px, 16vw, 190px);
+      height: clamp(90px, 16vw, 190px);
+      border-radius: 50%;
+      background: radial-gradient(circle at 50% 40%, #fcedec 30%, #e2bebe 75%, #b58d8d 100%);
+      box-shadow: 
+        0 15px 40px rgba(0, 0, 0, 0.8),
+        inset 0 0 25px rgba(130, 40, 40, 0.4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      margin: 0 5px;
+    }
+
+    /* Радужка глаза */
+    .iris {
+      position: relative;
+      width: 48%;
+      height: 48%;
+      border-radius: 50%;
+      background: radial-gradient(circle, #83c1b9 35%, #4c8a82 95%);
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: transform 0.05s ease-out;
+      will-change: transform;
+    }
+
+    /* Чёрный зрачок */
+    .pupil {
+      width: 58%;
+      height: 58%;
+      border-radius: 50%;
+      background-color: #080808;
+      box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.2);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="error-wrapper">
+    <span class="digit">4</span>
+    
+    <div class="eye" id="eye">
+      <div class="iris" id="iris">
+        <div class="pupil"></div>
+      </div>
+    </div>
+    
+    <span class="digit">4</span>
+  </div>
+
+  <script>
+    const eye = document.getElementById('eye');
+    const iris = document.getElementById('iris');
+
+    function trackCursor(clientX, clientY) {
+      const rect = eye.getBoundingClientRect();
+      const eyeCenterX = rect.left + rect.width / 2;
+      const eyeCenterY = rect.top + rect.height / 2;
+
+      // Вычисляем расстояние и угол до курсора
+      const deltaX = clientX - eyeCenterX;
+      const deltaY = clientY - eyeCenterY;
+      const angle = Math.atan2(deltaY, deltaX);
+
+      // Максимальный радиус смещения радужки внутри белка
+      const maxDist = (rect.width - iris.offsetWidth) / 2 * 0.8;
+      const distance = Math.min(Math.hypot(deltaX, deltaY) * 0.12, maxDist);
+
+      const moveX = Math.cos(angle) * distance;
+      const moveY = Math.sin(angle) * distance;
+
+      iris.style.transform = `translate(${moveX}px, ${moveY}px)`;
+    }
+
+    // Отслеживание мыши
+    window.addEventListener('mousemove', (e) => {
+      trackCursor(e.clientX, e.clientY);
+    });
+
+    // Поддержка сенсорных экранов
+    window.addEventListener('touchmove', (e) => {
+      if (e.touches.length > 0) {
+        trackCursor(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    });
+  </script>
+
+</body>
+</html>
